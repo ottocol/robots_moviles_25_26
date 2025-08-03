@@ -88,14 +88,49 @@ def main():
     node.destroy_node()
     rclpy.shutdown()
 
-#solo sirve por si queremos ejecutarlo con "python productor.py"
+#solo sirve por si queremos ejecutarlo con "python3 productor.py"
 if __name__ == '__main__':
     main()    
 ```
 
+Podríamos ejecutar el nodo simplemente yendo al directorio en el que esté `productor.py` y ejecutando `python3 productor.py`, o dándole al archivo permiso de ejecución con `chmod ugo+x productor.py` y ejecutándolo con `./productor.py`.
 
-consumidor.py (suscriptor)
+No obstante, la forma recomendada de ejecutar nodos en ROS2 es con `ros2 run`. Para que este comando funcione, nos falta modificar la configuración del paquete. Dentro de `src/practica0` hay dos archivos de configuración, `setup.py` y `setup.cfg`. En las últimas versiones de ROS2 (aproximadamente desde Humble) se recomienda editar la configuración en ambos, aunque el mínimo imprescindible es `setup.py`.
 
+En `setup.py`, dentro de la sección `console_scripts` definimos los nodos python del paquete, en nuestro caso:
+
+```python
+#resto del archivo setup.py...
+entry_points={
+        'console_scripts': [
+            # formato:  ejecutable = paquete.modulo:función
+            'productor = practica0.productor:main'
+        ],
+},
+```
+
+También es recomendable (aunque no estrictamente necesario) modificar el `setup.cfg`. Los nodos se ponen en la sección `[options.entry_points]` que si no existe tendremos que añadir al archivo:
+
+```ini
+[options.entry_points]
+console_scripts =
+    productor  = practica0.productor:main
+```
+
+ya "solo" nos falta compilar, actualizar las variables de entorno con el `setup.bash` del workspace y probar a ejecutar el nodo
+
+```bash
+#estando en el directorio "mi_ros2_ws"
+colcon build --symlink-install
+source install/setup.bash 
+ros2 run practica0 productor
+```
+> El parámetro `--symlink-install` nos ahorra tener que hacer `colcon build` cada vez que modifiquemos un archivo `.py`
+
+Nos faltaría el nodo que recibe los mensajes generados por el productor, al que llamaremos `consumidor` para seguir con la tradición. En el archivo `src/practica0/practica0/consumidor.py` pondríamos:
+
+
+```python
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
@@ -119,21 +154,43 @@ def main():
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
-Ejecución
 
-En ROS 2 no hay roscore: el DDS viene integrado.
+#solo sirve por si queremos ejecutarlo con "python3 productor.py"
+if __name__ == '__main__':
+    main()      
+```
 
-# terminal 1
-ros2 run practica1 productor
+Por supuesto tendríamos que modificar el `setup.py` para reflejar la existencia del nuevo nodo:
 
-# terminal 2
-ros2 run practica1 consumidor
-Herramientas de introspección:
+```python
+#resto del archivo setup.py...
+entry_points={
+        'console_scripts': [
+            # formato:  ejecutable = paquete.modulo:función
+            'productor = practica0.productor:main',
+            'consumidor = practica0.consumidor:main'
+        ],
+},
+```
 
-ros2 topic list
-ros2 topic info /saludo
-ros2 topic echo /saludo
-3. Leyendo mensajes de sensores y publicando al robot
+y también el `setup.cfg`:
+
+```ini
+[options.entry_points]
+console_scripts =
+    productor  = practica0.productor:main
+    consumidor = practica0.consumidor:main
+```
+
+Necesitaríamos hacer de nuevo el `colcon build` desde el directorio `mi_ros2_ws` ya que hemos creado un archivo nuevo (no solo hemos editado uno existente), y ya podríamos ejecutarlo con `ros2 run practica0 consumidor`.
+
+
+## 3. Leyendo mensajes de sensores y publicando al robot
+
+
+El ejemplo del productor/consumidor se usa mucho para introducir a la programación en ROS porque es simple pero lo cierto es que directamente no tiene mucho que ver con robots. Vamos a ver un ejemplo en el que recibamos mensajes de los sensores de un robot y enviemos mensajes a los efectores para moverlo.
+
+
 Supondremos que ejecutas TurtleBot 3 (oficialmente soportado en ROS 2) en Gazebo:
 
 # carga el entorno de los paquetes TurtleBot 3
