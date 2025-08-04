@@ -187,10 +187,9 @@ Necesitaríamos hacer de nuevo el `colcon build` desde el directorio `mi_ros2_ws
 
 ## 3. Interactuando con un robot
 
+### 3.1 Simulando el robot
 
-### 3.1 Leyendo mensajes de los sensores (== consumidor)
-
-El ejemplo del productor/consumidor se usa mucho para introducir a la programación en ROS porque es sencillo de entender, pero lo cierto es que directamente no tiene mucho que ver con robots. Vamos a ver un ejemplo en el que recibamos mensajes de los sensores de un robot y enviemos mensajes a los efectores para moverlo.
+El ejemplo del productor/consumidor se usa mucho para introducir a la programación en ROS porque es sencillo de entender, pero lo cierto es que directamente no tiene mucho que ver con robots. A partir de ahora vamos a escribir ejemplos en los que recibamos mensajes de los sensores de un robot y enviemos mensajes a los efectores para moverlo.
 
 Lo primero que necesitamos, evidentemente, es un robot. Como es lógico resulta más sencillo simularlo que usar uno real, aunque lo interesante de ROS es que el código que desarrollemos debería funcionar exactamente igual con la simulación que con el robot real. Por sencillez, en estos apuntes usaremos un simulador.
 
@@ -201,6 +200,9 @@ Existen muchos simuladores compatibles con ROS2. Seguramente el más conocido es
 Mvsim trae varios mundos de demo, por ejemplo podéis probar esta: `ros2 launch mvsim demo_turtlebot_world.launch.py`. Debería aparecer una especie de recinto con paredes hexagonales y objetos cilíndricos distribuidos uniformemente. En rojo se muestran las distancias detectadas por el LIDAR 2D del robot, que tiene 360 grados de campo de visión.
 
 > Quizá habéis visto alguna vez este mundo simulado, ya que es una copia del que se incluye por defecto en los paquetes de simulación de los robots Turtlebot 3, muy usados en ROS. Fijaos en que podéis mover al robot con el teclado, las teclas aparecen en la ventanita titulada `status` dentro del simulador. En la ventana principal tenéis la simulación  y se muestran las lecturas del LIDAR 2D y tenéis otra mini-ventana con la imagen de la cámara RGB. Por otro lado se habrá abierto otra ventana con `rviz2` en la que también se pueden ver las lecturas del LIDAR 2D y la cámara. Si tuviéramos un robot real evidentemente no tendríamos la ventana de mvsim pero la de `rviz2` sería exactamente igual.
+
+
+### 3.2 Leyendo mensajes de los sensores (consumidor)
 
 Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En ROS el topic asociado a este tipo de sensor suele llamarse `/scan`, aunque en esta simulación que hemos elegido se llama `/laser1`.
 
@@ -256,7 +258,7 @@ Como hemos añadido un archivo `.py` que es un nodo ROS, tendremos que volver a 
 
 No damos las instrucciones detalladas ya que a estas alturas deberíais saberlo hacer vosotros :).
 
-## 3.2 Publicando comandos de velocidad (== productor)
+## 3.3 Publicando comandos de velocidad (productor)
 
 La simulación que estamos usando emplea `/cmd_vel` como *topic* asociado a los motores. Este *topic* admite mensajes de tipo `Twist`, que básicamente son comandos de velocidad lineal y angular. Aquí tenéis un ejemplo de un nodo que permite teleoperar al robot con el teclado (como habéis visto, en mvsim ya tenemos integrada la funcionalidad de teleoperación con teclado, tomaros esto simplemente como un ejemplo de cómo publicar mensajes a los efectores del robot).
 
@@ -321,7 +323,7 @@ Tened en cuenta que este código añade una nueva dependencia que es `geometry_m
 Y otra vez hemos creado un nuevo nodo, por lo que tendremos que modificar el `setup.py`, el `setup.cfg` y recompilar.
 
 
-### 3.3  Nodo que recibe LaserScan y publica Twist (consumidor + productor)
+### 3.4  Nodo que recibe LaserScan y publica Twist (consumidor + productor)
 
 Podemos combinar la recepción y publicación de mensajes en un único nodo que haga de consumidor y productor a la vez. Aquí tenéis un ejemplo que implementa un algoritmo muy sencillo de evitación de obstáculos
 
