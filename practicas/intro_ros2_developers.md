@@ -185,25 +185,33 @@ console_scripts =
 Necesitaríamos hacer de nuevo el `colcon build` desde el directorio `mi_ros2_ws` ya que hemos creado un archivo nuevo (no solo hemos editado uno existente), y ya podríamos ejecutarlo con `ros2 run practica0 consumidor`.
 
 
-## 3. Leyendo mensajes de sensores y publicando al robot
+## 3. Interactuando con un robot
 
 
-El ejemplo del productor/consumidor se usa mucho para introducir a la programación en ROS porque es simple pero lo cierto es que directamente no tiene mucho que ver con robots. Vamos a ver un ejemplo en el que recibamos mensajes de los sensores de un robot y enviemos mensajes a los efectores para moverlo.
+### 3.1 Leyendo mensajes de los sensores (== consumidor)
+
+El ejemplo del productor/consumidor se usa mucho para introducir a la programación en ROS porque es sencillo de entender, pero lo cierto es que directamente no tiene mucho que ver con robots. Vamos a ver un ejemplo en el que recibamos mensajes de los sensores de un robot y enviemos mensajes a los efectores para moverlo.
+
+Lo primero que necesitamos, evidentemente, es un robot. Como es lógico resulta más sencillo simularlo que usar uno real, aunque lo interesante de ROS es que el código que desarrollemos debería funcionar exactamente igual con la simulación que con el robot real. Por sencillez, en estos apuntes usaremos un simulador.
+
+Existen muchos simuladores compatibles con ROS2. Seguramente el más conocido es Gazebo, aunque tiene el problema de consumir muchos recursos. Por eso en esta asignatura siempre que sea posible usaremos simuladores más ligeros. En concreto aquí vamos a usar un simulador llamado `mvsim` ([https://github.com/MRPT/mvsim](https://github.com/MRPT/mvsim)). No es un simulador totalmente 3D por lo que por ejemplo no serviría para simular drones, pero a cambio consume muchos menos recursos computacionales que Gazebo y prácticamente permite simular los mismos sensores (lidar 2D/3D, cámaras RGB y de profundidad...)
+
+> Instalar mvsim debería ser muy sencillo, por ejemplo suponiendo que tenemos ROS2 Jazzy activamos el entorno ROS (`source /opt/ros/jazzy/setup.bash`) y ejecutamos `sudo apt install ros-jazzy-mvsim`. Existen paquetes para otras versiones de ROS, por ejemplo `ros-humble-mvsim`.
+
+Mvsim trae varios mundos de demo, por ejemplo podéis probar esta: `ros2 launch mvsim demo_turtlebot_world.launch.py`. Debería aparecer una especie de recinto con paredes hexagonales y objetos cilíndricos distribuidos uniformemente. En rojo se muestran las distancias detectadas por el LIDAR 2D del robot, que tiene 360 grados de campo de visión.
+
+> Quizá habéis visto alguna vez este mundo simulado, ya que es una copia del que se incluye por defecto en los paquetes de simulación de los robots Turtlebot 3, muy usados en ROS. Fijaos en que podéis mover al robot con el teclado, las teclas aparecen en la ventanita titulada `status` dentro del simulador. En la ventana principal tenéis la simulación  y se muestran las lecturas del LIDAR 2D y tenéis otra mini-ventana con la imagen de la cámara RGB. Por otro lado se habrá abierto otra ventana con `rviz2` en la que también se pueden ver las lecturas del LIDAR 2D y la cámara. Si tuviéramos un robot real evidentemente no tendríamos la ventana de mvsim pero la de `rviz2` sería exactamente igual.
+
+Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En ROS el topic asociado a este tipo de sensor suele llamarse `/scan`, aunque en esta simulación que hemos elegido se llama `/laser1`.
+
+> Podéis comprobarlo listando los topics con `ros2 topic list`, comprobando que aparece `/laser1` y mostrando la información de este con `ros2 topic info /laser1`, veréis que es de tipo `LaserScan`.
 
 
-Supondremos que ejecutas TurtleBot 3 (oficialmente soportado en ROS 2) en Gazebo:
+El código lo tenéis aquí, podéis guardarlo en un archivo del workspace `src/practica0/practica0/distancias.py`
 
-# carga el entorno de los paquetes TurtleBot 3
-source ~/turtlebot3_ws/install/setup.bash
-
-# lanza un mundo simple
-export TURTLEBOT3_MODEL=burger     # waffle, waffle_pi, burger…
-ros2 launch turtlebot3_gazebo empty_world.launch.py
-Leyendo el laser scan
-
-En ROS 2 el topic suele seguir siendo /scan y el mensaje sensor_msgs/msg/LaserScan.
-
+```python
 #!/usr/bin/env python3
+#lee las distancias devueltas por el LIDAR 2D e imprime la más cercana y la más lejana
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
@@ -211,14 +219,14 @@ import math
 
 class ReadScan(Node):
     def __init__(self):
-        super().__init__('read_scan')
+        super().__init__('distancias')
         self.sub = self.create_subscription(
             LaserScan,
             '/scan',
-            self.cb,
+            self.callback,
             10)
 
-    def cb(self, msg):
+    def callback(self, msg):
         # filtra los “inf” generados cuando no hay eco
         rangos = [r for r in msg.ranges if not math.isinf(r)]
         if not rangos:
@@ -228,17 +236,33 @@ class ReadScan(Node):
 
 def main():
     rclpy.init()
-    rclpy.spin(ReadScan())
+    node = ReadScan()
+    rclpy.spin(node)
     rclpy.shutdown()
-Añade sensor_msgs como dependencia:
 
-ros2 pkg create --build-type ament_python --dependencies rclpy std_msgs sensor_msgs practica1
-(o simplemente abre package.xml y añade sensor_msgs dentro de <depend> y vuelve a compilar).
+#solo sirve por si queremos ejecutarlo con "python3 distancias.py"
+if __name__ == '__main__':
+    main() 
+``` 
 
-4. Publicando comandos de velocidad
-En ROS 2 los TurtleBot 3 usan /cmd_vel (Twist). Ejemplo de teleoperación mínima:
 
+Este código introduce una nueva dependencia en el paquete, que es `sensor_msgs`. Por eso tendremos que abrir el archivo `package.xml` y añadir `sensor_msgs` con una nueva etiqueta `<depend>`. 
+
+Como hemos añadido un archivo `.py` que es un nodo ROS, tendremos que volver a hacer toda la parafernalia de:
+
+1. Modificar el `setup.py`
+2. Modificar el `setup.cfg`
+3. Volver a compilar con `colcon build --symlink-install`
+
+No damos las instrucciones detalladas ya que a estas alturas deberíais saberlo hacer vosotros :).
+
+## 3.2 Publicando comandos de velocidad (== productor)
+
+La simulación que estamos usando emplea `/cmd_vel` como *topic* asociado a los motores. Este *topic* admite mensajes de tipo `Twist`, que básicamente son comandos de velocidad lineal y angular. Aquí tenéis un ejemplo de un nodo que permite teleoperar al robot con el teclado (como habéis visto, en mvsim ya tenemos integrada la funcionalidad de teleoperación con teclado, tomaros esto simplemente como un ejemplo de cómo publicar mensajes a los efectores del robot).
+
+```python
 #!/usr/bin/env python3
+import sys, tty, termios        
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
@@ -246,78 +270,116 @@ from geometry_msgs.msg import Twist
 class Teleop(Node):
     def __init__(self):
         super().__init__('teleoperacion')
-        self.pub = self.create_publisher(Twist, '/cmd_vel', 5)
-
-    def run(self):
-        try:
-            while rclpy.ok():
-                c = input("Comando (f:forward, l:left, r:right) > ")
-                cmd = Twist()
-                if c == 'f':
-                    cmd.linear.x = 0.25
-                elif c == 'l':
-                    cmd.linear.x = 0.25
-                    cmd.angular.z = 0.75
-                elif c == 'r':
-                    cmd.linear.x = 0.25
-                    cmd.angular.z = -0.75
-                else:
-                    continue
-                self.pub.publish(cmd)
-        except (KeyboardInterrupt, EOFError):
-            pass  # CTRL-C limpia
+        self.pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        print("a = adelante | z = izquierda | x = derecha | q = salir")
 
 def main():
     rclpy.init()
-    Teleop().run()
-    rclpy.shutdown()
-Añade geometry_msgs como dependencia y recompila.
+    node = Teleop()
 
-5. Nodo que recibe scan y publica cmd_vel (productor + consumidor)
+    # nos peleamos con la terminal para ponerla en modo 'cbreak' (procesar pulsaciones de tecla sin tener que pulsar INTRO)
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)   # guardamos la configuración actual
+    tty.setcbreak(fd)             # modo cbreak: lee de a 1 carácter
+
+    try:
+        while rclpy.ok():
+            key = sys.stdin.read(1)  # bloquea hasta pulsar algo
+
+            if key in ('q', '\x03'):   # 'q' o Ctrl-C
+                break
+
+            cmd = Twist()
+            if key == 'a':
+                cmd.linear.x = 0.25
+                cmd.angular.z = 0
+            elif key == 'z':
+                cmd.linear.x = 0.25
+                cmd.angular.z = 0.75 # recordad que en ROS el giro positivo es a izquierdas
+            elif key == 'x':
+                cmd.linear.x = 0.25
+                cmd.angular.z = -0.75
+            else:
+                continue            # tecla no válida, ignoramos
+
+            node.pub.publish(cmd)
+            rclpy.spin_once(node, timeout_sec=0.0)  # por si ROS tuviera que procesar algo (en este ejemplo no es necesario, pero es buena práctica)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)  # restaurar terminal
+        node.destroy_node()
+        rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+
+```
+
+> El código se complica un poco por el uso de las librerías `sys`, `tty` y `termios` que nos permiten procesar el teclado sin necesidad de pulsar INTRO después de cada tecla (poniendo a la terminal en un modo especial que se llama *cbreak*), pero no os perdáis en esos detalles, no son importantes.
+
+Tened en cuenta que este código añade una nueva dependencia que es `geometry_msgs`, por lo que habrá que editar el `package.xml` e incluir una nueva etiqueta `<depend>`.
+
+Y otra vez hemos creado un nuevo nodo, por lo que tendremos que modificar el `setup.py`, el `setup.cfg` y recompilar.
+
+
+### 3.3  Nodo que recibe LaserScan y publica Twist (consumidor + productor)
+
+Podemos combinar la recepción y publicación de mensajes en un único nodo que haga de consumidor y productor a la vez. Aquí tenéis un ejemplo que implementa un algoritmo muy sencillo de evitación de obstáculos
+
+```python
 #!/usr/bin/env python3
+import math
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
-class Evitacion(Node):
-    def __init__(self):
-        super().__init__('evitacion_obstaculos')
-        self.pub = self.create_publisher(Twist, '/cmd_vel', 5)
-        self.sub = self.create_subscription(LaserScan, '/scan', self.cb, 10)
+THRESH = 0.4      # m, umbral de seguridad
+SPEED_NORMAL = 0.25
+SPEED_SLOW = 0.1
+TURN_NORMAL   = 0.5      # rad/s, giro normal
+TURN_FAST   = 1.5      # rad/s, giro de emergencia (siempre izquierda)
 
-    def cb(self, msg):
-        # distancia mínima frontal (±15°)
-        center_indices = range(len(msg.ranges)//2 - 15, len(msg.ranges)//2 + 15)
-        front = [msg.ranges[i] for i in center_indices if msg.ranges[i] < msg.range_max]
-        min_front = min(front) if front else msg.range_max
+
+class SimpleAvoid(Node):
+    def __init__(self):
+        super().__init__('simple_avoid')
+        self.pub = self.create_publisher(Twist, '/cmd_vel', 5)
+        self.sub = self.create_subscription(LaserScan, '/laser1', self.cb, 10)
+
+    def cb(self, msg: LaserScan):
+        # Índices de los dos rayos a +-20° respecto al frente.
+        idx_izq20 = int(round(( math.radians(20) - msg.angle_min) / msg.angle_increment))
+        idx_der20 = int(round((-math.radians(20) - msg.angle_min) / msg.angle_increment))
+
+        # Distancias medidas en esos indices (Si es infinito lo ponemos a rango máximo).
+        d_der = msg.ranges[idx_der20] if math.isfinite(msg.ranges[idx_der20]) else msg.range_max
+        d_izq = msg.ranges[idx_izq20] if math.isfinite(msg.ranges[idx_izq20]) else msg.range_max
 
         cmd = Twist()
-        if min_front < 0.4:          # obstáculo cerca
-            cmd.angular.z = 1.0      # gira in-place
+
+        if min(d_der, d_izq) < THRESH:
+            # Obstáculo muy cerca → gira fuerte a la izquierda para evitar colisión
+            cmd.angular.z = TURN_FAST
+            cmd.linear.x = SPEED_SLOW
         else:
-            cmd.linear.x = 0.22      # avanza
+            # Gira hacia el rayo más despejado.
+            cmd.angular.z = TURN_NORMAL if d_izq > d_der else -TURN_NORMAL
+            cmd.linear.x = SPEED_NORMAL
 
         self.pub.publish(cmd)
 
+
 def main():
     rclpy.init()
-    rclpy.spin(Evitacion())
+    rclpy.spin(SimpleAvoid())
     rclpy.shutdown()
-Resumen de comandos equivalentes ROS 1 → ROS 2
 
-Acción	ROS 1	ROS 2
-Compilar workspace	catkin_make	colcon build
-Añadir script Python	marcar ejecutable + editar CMakeLists	declarar en setup.cfg → console_scripts
-Lanzar nodo	rosrun pkg nodo.py o roslaunch	ros2 run pkg nodo o ros2 launch
-Listar topics	rostopic list	ros2 topic list
-Ver un topic	rostopic echo /topic	ros2 topic echo /topic
-Información de un topic	rostopic info /topic	ros2 topic info /topic
-Ver la definición de un mensaje	rosmsg show geometry_msgs/Twist	ros2 interface show geometry_msgs/msg/Twist
-Últimas buenas prácticas ROS 2 (2025)
-Python 3.12 es la versión predeterminada en Ubuntu 24.04.
-Por defecto los ejecutables Python van en console_scripts; evita usar “scripts sueltos” fuera de empaquetado.
-Usa --symlink-install al compilar para iterar rápido (no necesita reinstalar).
-El “ros2 daemon” suele iniciarse automáticamente; fuerzalo con ros2 daemon start si notas que no encuentra nuevos tópicos.
-Revisa los QOS si trabajas con sensores de alta frecuencia (DepthImage, rmw_qos_profile_sensor_data).
-¡Con esto ya tienes tus apuntes totalmente migrados a ROS 2!
+
+if __name__ == '__main__':
+    main()
+```
+
+> Tomaros el código anterior simplemente como ejemplo de nodo que a la vez publica en algunos topics y está suscrito a otros, no como un algoritmo útil para evitación de obstáculos, ya que fallará en muchos casos.
+
+Como siempre, al haber creado un nuevo nodo tendremos que modificar el `setup.py`, el `setup.cfg` y recompilar.
