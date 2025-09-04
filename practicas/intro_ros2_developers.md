@@ -9,12 +9,14 @@ En ROS 2 los conceptos de workspace y packages son iguales que en ROS 1 pero hay
 
 |       | ROS 1 (catkin) | ROS 2 (ament + colcon) |
 |------|----------------|------------------------|
-|nombre del workspace: | `catkin_ws` por convención | `ros2_ws` por convención |
-|compilar con: | `catkin_make` | `colcon build` |
-|"instalar" el workspace en el shell: | `source devel/setup.bash` | `source install/setup.bash` |
-|crear un paquete: | `catkin_create_pkg` | `ros2 pkg create` |
+|Nombre del workspace: | `catkin_ws` por convención | `ros2_ws` por convención |
+|Compilar con: | `catkin_make` | `colcon build` |
+|"Instalar" el workspace en el shell: | `source devel/setup.bash` | `source install/setup.bash` |
+|Crear un paquete: | `catkin_create_pkg` | `ros2 pkg create` |
 
 ### Crear un workspace
+
+> En los ordenadores del laboratorio verás que hay un *workspace* ya creado que se llama `ros2_ws`. Ahí están instalados los paquetes para trabajar con los Turtlebot 2. Para ver el proceso desde cero, mejor vamos a crear el nuestro propio.
 
 ```bash
 # 1. Crea el workspace y su src
@@ -35,7 +37,7 @@ source mi_ros2_ws/install/setup.bash
 
 ### Crear un package
 
-Los paquetes residen el el directorio `src` del *workspace*:
+Los paquetes residen en el directorio `src` del *workspace*:
 
 
 1. **Métete en el directorio `src`** del *workspace* que creaste 
@@ -44,7 +46,7 @@ Los paquetes residen el el directorio `src` del *workspace*:
     cd mi_ros2_ws/src
     ```
 
-2. **Ejecuta la orden `ros2 pkg create`** para crear el paquete. Hace falta darle un nombre y decir si es de tipo python o C++ y de qué otros paquetes depende (en nuestro caso `rclpy`, que contiene los APIs básicos para trabajar con Python y `std_msgs` que contiene los tipos de mensaje básicos como cadenas, enteros, arrays, etc)
+2. **Ejecuta la orden `ros2 pkg create`** para crear el paquete. Hace falta darle un nombre y decir si es de tipo Python o C++ y de qué otros paquetes depende (en nuestro caso `rclpy`, que contiene las APIs básicas para trabajar con Python y `std_msgs` que contiene los tipos de mensaje básicos como cadenas, enteros, arrays, etc)
 
     ```bash
     ros2 pkg create practica0 --build-type ament_python --dependencies rclpy std_msgs
@@ -109,7 +111,7 @@ entry_points={
 },
 ```
 
-También es recomendable (aunque no estrictamente necesario) modificar el `setup.cfg`. Los nodos se ponen en la sección `[options.entry_points]` que si no existe tendremos que añadir al archivo:
+También es recomendable (aunque no estrictamente necesario) modificar el `setup.cfg`. Los nodos se declaran en la sección `[options.entry_points]` que si no existe tendremos que añadir al archivo:
 
 ```ini
 [options.entry_points]
@@ -155,7 +157,7 @@ def main():
     node.destroy_node()
     rclpy.shutdown()
 
-#solo sirve por si queremos ejecutarlo con "python3 productor.py"
+#solo sirve por si queremos ejecutarlo con "python3 consumidor.py"
 if __name__ == '__main__':
     main()      
 ```
@@ -193,20 +195,21 @@ El ejemplo del productor/consumidor se usa mucho para introducir a la programaci
 
 Lo primero que necesitamos, evidentemente, es un robot. Como es lógico resulta más sencillo simularlo que usar uno real, aunque lo interesante de ROS es que el código que desarrollemos debería funcionar exactamente igual con la simulación que con el robot real. Por sencillez, en estos apuntes usaremos un simulador.
 
-Existen muchos simuladores compatibles con ROS2. Seguramente el más conocido es Gazebo, aunque tiene el problema de consumir muchos recursos. Por eso en esta asignatura siempre que sea posible usaremos simuladores más ligeros. En concreto aquí vamos a usar un simulador llamado `mvsim` ([https://github.com/MRPT/mvsim](https://github.com/MRPT/mvsim)). No es un simulador totalmente 3D por lo que por ejemplo no serviría para simular drones, pero a cambio consume muchos menos recursos computacionales que Gazebo y prácticamente permite simular los mismos sensores (lidar 2D/3D, cámaras RGB y de profundidad...)
+De momento en los ordenadores de los laboratorios solo está instalado Gazebo, así que es el que usaremos por ahora. También están instalados los paquetes para trabajar con Turtlebot 2, por lo que es el robot que simularemos. Para lanzar la simulación, escribe en una terminal:
 
-> Instalar mvsim debería ser muy sencillo, por ejemplo suponiendo que tenemos ROS2 Jazzy activamos el entorno ROS (`source /opt/ros/jazzy/setup.bash`) y ejecutamos `sudo apt install ros-jazzy-mvsim`. Existen paquetes para otras versiones de ROS, por ejemplo `ros-humble-mvsim`.
-
-Mvsim trae varios mundos de demo, por ejemplo podéis probar esta: `ros2 launch mvsim demo_turtlebot_world.launch.py`. Debería aparecer una especie de recinto con paredes hexagonales y objetos cilíndricos distribuidos uniformemente. En rojo se muestran las distancias detectadas por el LIDAR 2D del robot, que tiene 360 grados de campo de visión.
-
-> Quizá habéis visto alguna vez este mundo simulado, ya que es una copia del que se incluye por defecto en los paquetes de simulación de los robots Turtlebot 3, muy usados en ROS. Fijaos en que podéis mover al robot con el teclado, las teclas aparecen en la ventanita titulada `status` dentro del simulador. En la ventana principal tenéis la simulación  y se muestran las lecturas del LIDAR 2D y tenéis otra mini-ventana con la imagen de la cámara RGB. Por otro lado se habrá abierto otra ventana con `rviz2` en la que también se pueden ver las lecturas del LIDAR 2D y la cámara. Si tuviéramos un robot real evidentemente no tendríamos la ventana de mvsim pero la de `rviz2` sería exactamente igual.
-
+```bash
+#Actualizar variables de entorno para ROS. solo si no lo has hecho ya en esta terminal
+source /opt/ros/jazzy/setup.bash
+#Para que funcionen los paquetes de Turtlebot 2
+source ~/ros2_ws/install/setup.bash
+ros2 launch kobuki simulation.launch.py
+```
 
 ### 3.2 Leyendo mensajes de los sensores (consumidor)
 
-Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En ROS el topic asociado a este tipo de sensor suele llamarse `/scan`, aunque en esta simulación que hemos elegido se llama `/laser1`.
+Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En ROS el topic asociado a este tipo de sensor suele llamarse `/scan`, aunque en esta simulación que hemos elegido se llama `/scan_raw`
 
-> Podéis comprobarlo listando los topics con `ros2 topic list`, comprobando que aparece `/laser1` y mostrando la información de este con `ros2 topic info /laser1`, veréis que es de tipo `LaserScan`.
+> Podéis comprobarlo listando los topics con `ros2 topic list`, comprobando que aparece `/scan_raw` y mostrando la información de este con `ros2 topic info /scan_raw`, veréis que es de tipo `LaserScan`. En general, los topics de este tipo suelen llevar `scan` en el nombre, por lo que un truco para encontrarlos es hacer `ros2 topic list | grep "scan"`.
 
 
 El código lo tenéis aquí, podéis guardarlo en un archivo del workspace `src/practica0/practica0/distancias.py`
@@ -224,7 +227,7 @@ class ReadScan(Node):
         super().__init__('distancias')
         self.sub = self.create_subscription(
             LaserScan,
-            '/scan',
+            '/scan_raw',
             self.callback,
             10)
 
@@ -260,7 +263,7 @@ No damos las instrucciones detalladas ya que a estas alturas deberíais saberlo 
 
 ## 3.3 Publicando comandos de velocidad (productor)
 
-La simulación que estamos usando emplea `/cmd_vel` como *topic* asociado a los motores. Este *topic* admite mensajes de tipo `Twist`, que básicamente son comandos de velocidad lineal y angular. Aquí tenéis un ejemplo de un nodo que permite teleoperar al robot con el teclado (como habéis visto, en mvsim ya tenemos integrada la funcionalidad de teleoperación con teclado, tomaros esto simplemente como un ejemplo de cómo publicar mensajes a los efectores del robot).
+La simulación que estamos usando emplea `/cmd_vel` como *topic* asociado a los motores. Este *topic* admite mensajes de tipo `Twist`, que básicamente son comandos de velocidad lineal y angular. Aquí tenéis un ejemplo de un nodo que permite teleoperar al robot con el teclado.
 
 ```python
 #!/usr/bin/env python3
@@ -347,7 +350,7 @@ class SimpleAvoid(Node):
     def __init__(self):
         super().__init__('simple_avoid')
         self.pub = self.create_publisher(Twist, '/cmd_vel', 5)
-        self.sub = self.create_subscription(LaserScan, '/laser1', self.cb, 10)
+        self.sub = self.create_subscription(LaserScan, '/scan_raw', self.cb, 10)
 
     def cb(self, msg: LaserScan):
         # Índices de los dos rayos a +-20° respecto al frente.
