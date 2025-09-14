@@ -195,24 +195,37 @@ El ejemplo del productor/consumidor se usa mucho para introducir a la programaci
 
 Lo primero que necesitamos, evidentemente, es un robot. Como es lógico resulta más sencillo simularlo que usar uno real, aunque lo interesante de ROS es que el código que desarrollemos debería funcionar exactamente igual con la simulación que con el robot real. Por sencillez, en estos apuntes usaremos un simulador.
 
-De momento en los ordenadores de los laboratorios solo está instalado Gazebo, así que es el que usaremos por ahora. También están instalados los paquetes para trabajar con Turtlebot 2, por lo que es el robot que simularemos. Para lanzar la simulación, escribe en una terminal:
+De momento en los ordenadores de los laboratorios hay dos simuladores instalados: Gazebo y mvsim. 
+Escribe esto primero en una terminal para preparar las variables de entorno
 
 ```bash
 #Actualizar variables de entorno para ROS. solo si no lo has hecho ya en esta terminal
 source /opt/ros/jazzy/setup.bash
+```
+
+Y ahora si quieres un Turtlebot 2 simulado en Gazebo:
+
+```bash
 #Para que funcionen los paquetes de Turtlebot 2
 source ~/ros2_ws/install/setup.bash
 ros2 launch kobuki simulation.launch.py
 ```
 
+O ALTERNATIVAMENTE, si quieres un Turtlebot 3 simulado en mvsim:
+
+```bash
+ros2 launch mvsim demo_turtlebot_world.launch.py
+```
+
 ### 3.2 Leyendo mensajes de los sensores (consumidor)
 
-Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En ROS el topic asociado a este tipo de sensor suele llamarse `/scan`, aunque en esta simulación que hemos elegido se llama `/scan_raw`
+Vamos a escribir el código de un nodo que lea las distancias devueltas por el LIDAR 2D y imprima en pantalla la distancia al obstáculo más cercano y al más lejano. En la simulación del Turtlebot 2 en Gazebo el topic del laser 2D se llama `/scan_raw`. En la del Turtlebot 3 de mvsim se llama `/laser1`.
 
-> Podéis comprobarlo listando los topics con `ros2 topic list`, comprobando que aparece `/scan_raw` y mostrando la información de este con `ros2 topic info /scan_raw`, veréis que es de tipo `LaserScan`. En general, los topics de este tipo suelen llevar `scan` en el nombre, por lo que un truco para encontrarlos es hacer `ros2 topic list | grep "scan"`.
-
+> Podéis comprobarlo si usáis Gazebo listando los topics con `ros2 topic list`, comprobando que aparece `/scan_raw` y mostrando la información de este con `ros2 topic info /scan_raw`, veréis que es de tipo `LaserScan`. En general, los topics de este tipo suelen llevar `scan` en el nombre, por lo que un truco para encontrarlos es hacer `ros2 topic list | grep "scan"`. En el simulador mvsim suelen llevar "laser" en el nombre. Por ejemplo en la simulación del Turtlebot 3 el topic se llama `/laser1`.
 
 El código lo tenéis aquí, podéis guardarlo en un archivo del workspace `src/practica0/practica0/distancias.py`
+
+⚠️ En el siguiente código cambia el `/scan_raw` por `/laser1` si estás usando la simulación de mvsim
 
 ```python
 #!/usr/bin/env python3
@@ -328,7 +341,9 @@ Y otra vez hemos creado un nuevo nodo, por lo que tendremos que modificar el `se
 
 ### 3.4  Nodo que recibe LaserScan y publica Twist (consumidor + productor)
 
-Podemos combinar la recepción y publicación de mensajes en un único nodo que haga de consumidor y productor a la vez. Aquí tenéis un ejemplo que implementa un algoritmo muy sencillo de evitación de obstáculos
+Podemos combinar la recepción y publicación de mensajes en un único nodo que haga de consumidor y productor a la vez. Aquí tenéis un ejemplo que implementa un algoritmo muy sencillo de evitación de obstáculos.
+
+⚠️ En el siguiente código cambia el `/scan_raw` por `/laser1` si estás usando la simulación de mvsim
 
 ```python
 #!/usr/bin/env python3
@@ -350,6 +365,7 @@ class SimpleAvoid(Node):
     def __init__(self):
         super().__init__('simple_avoid')
         self.pub = self.create_publisher(Twist, '/cmd_vel', 5)
+        #CUIDADO!!! con el nombre del topic, verifica que se llama así, y si no cámbialo por el que sea
         self.sub = self.create_subscription(LaserScan, '/scan_raw', self.cb, 10)
 
     def cb(self, msg: LaserScan):
