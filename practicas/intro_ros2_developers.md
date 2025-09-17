@@ -310,7 +310,7 @@ def main():
             cmd = Twist()
             if key == 'a':
                 cmd.linear.x = 0.25
-                cmd.angular.z = 0
+                cmd.angular.z = 0.0
             elif key == 'z':
                 cmd.linear.x = 0.25
                 cmd.angular.z = 0.75 # recordad que en ROS el giro positivo es a izquierdas
