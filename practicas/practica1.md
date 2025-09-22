@@ -38,8 +38,6 @@ En el [REP (ROS Enhancement Proposal) 105](https://www.ros.org/reps/rep-0105.htm
 - `odom`: Este sistema de coordenadas está fijo en el mundo (no se mueve cuando se mueve el robot) y su origen y orientación cero coincide con la posición de partida del robot. Es lo que se conoce habitualmente como *odometría*: conforme el robot se va moviendo también va estimando su posición actual con respecto a este sistema.
 - `map`: Es un sistema de coordenadas asociado a un mapa del entorno. Está fijo en el mundo (no se mueve cuando se mueve el robot) y su origen y orientación cero es arbitrario y depende de quien haya creado el mapa. El robot puede estimar su posición con respecto a este sistema comparando el mapa con lo que perciben actualmente los sensores. Esto se conoce como *localización* (lo veremos en la práctica 2).
 
-> Como nosotros somos los que vamos a crear el mapa, podemos poner su origen en el punto que queramos. Lo más sencillo es ponerlo en el $(0,0,0)$ de `odom`.
-
 Además, como usaremos un láser para detectar obstáculos, tendremos un sistema asociado a él. El nombre típico que se le suele dar es `base_laser_link`, y es en el que se obtienen las medidas del láser.
 
 > **IMPORTANTE:** En el mundo simulado que os pasamos, el sistema de coordenadas del láser se llama igual que el topic del láser, `scan_raw`
@@ -53,6 +51,8 @@ ros2 run tf_tools view_frames
 Para el mundo simulado de la práctica, el pdf debería mostrar algo como esta figura:
 
 ![](img_practica1/grafo_tf.png)
+
+> En el simulador mvsim por defecto se define el sistema de coordenadas "map" coincidiendo exactamente con "odom", así que en este caso "map" no nos sirve de mucho. 
 
 Este grafo se conoce como *grafo de transformaciones*. Que aparezca una arista que va de un nodo A a un nodo B indica que ROS conoce la matriz que transforma el sistema A en el B. Si conocemos la transformación de A a B también tenemos la de B a A, ya que es la matriz inversa, de modo que la dirección del arco no es importante.
 
@@ -100,6 +100,8 @@ if __name__ == '__main__':
     main()
 ```
 
+Tened en cuenta que como "odom" es el único sistema fijo que tenemos (como vimos, en mvsim por defecto "map"=="odom"), debemos guardar las coordenadas de los objetos que compongan el mapa en el sistema "odom" (sean las nubes de puntos o los landmarks).
+
 
 ## Mapas basados en nubes de puntos
 
@@ -112,7 +114,7 @@ Como sabemos, cada "barrido" del láser 2D nos da un *scan* con las distancias a
 Pistas para la implementación:
 
 - Las nubes de puntos en ROS se representan con mensajes de tipo `sensor_msgs/msg/PointCloud2`. Se pueden visualizar en RViz con un display de tipo `PointCloud2`.
-- Los pasos 1 y 2 los podéis realizar en una sola operación si os ayudáis de la clase `láserProjection`. Investigad su uso. Cuidado: está en el paquete `ros-jazzy-láser-geometry` (o en lugar de `jazzy` la versión que sea). Este paquete debería estar instalado en los laboratorios y la máquina virtual de la asignatura pero si usáis otra distribución aseguráos primero de que lo instaláis.
+- Los pasos 1 y 2 los podéis realizar en una sola operación si os ayudáis de la clase `laserProjection`. Investigad su uso. Cuidado: está en el paquete `ros-jazzy-laser-geometry` (o en lugar de `jazzy` la versión que sea). Este paquete debería estar instalado en los laboratorios y la máquina virtual de la asignatura pero si usáis otra distribución aseguráos primero de que lo instaláis.
 - Como sistema de coordenadas global y externo al robot os recomiendo que uséis "odom", nos evita el "problema" de dónde fijar el origen de "map".
 - Conforme la nube global se vaya haciendo más grande, mantener todos los puntos será ineficiente. Podéis *voxelizar* los puntos, lo que quiere decir dividir el espacio en pequeños cubos y guardar solo un punto por cada uno de ellos (como es un láser 2D en realidad serán cuadrados en el plano, pero es la  misma idea). Investigad el tema.
 
@@ -120,7 +122,7 @@ Pistas para la implementación:
 
 Un *landmark* es un lugar o un objeto que se puede distinguir más o menos fácilmente del resto del entorno. Qué consideremos un *landmark* dependerá del tipo de sensor que estemos usando. Por ejemplo para un láser 2D los *landmarks* pueden ser las esquinas de las paredes, ya que son sitios donde la dirección de los puntos detectados cambia bruscamente. Para una cámara pueden ser objetos de un color especial, o códigos QR colocados en las paredes.
 
-En los mundos simulados que os pasamos, los *landmarks* más evidentes son los conos y los contenedores de basura, pero podéis intentar detectar otros como las esquinas de las paredes del fondo.
+En los mundos simulados que os pasamos, los *landmarks* más evidentes son los conos y los contenedores de basura, pero podéis intentar detectar otros como las esquinas de las paredes del fondo. Cada landmark lo podéis reducir simplemente a las coordenadas $(x,y)$ del centro.
 
 pistas para la implementación:
 
