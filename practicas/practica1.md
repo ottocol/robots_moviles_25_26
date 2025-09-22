@@ -139,11 +139,12 @@ La fecha límite de entrega será el **7 de octubre a las 23:59 horas**. La entr
 El baremo de puntuación será el siguiente:
 
 - Hasta 3 puntos: implementar y probar un algoritmo de mapeado basado en nube de puntos sin voxelización
-- Hasta 1 punto: implementar voxelización para reducir el coste de mantener la nbe de puntos. Probar en qué medida reduce el coste del algoritmo
+- Hasta 1.5 puntos: implementar voxelización para reducir el coste de mantener la nbe de puntos. Probar en qué medida reduce el coste del algoritmo
 - Hasta 3 puntos: implementar y probar un algoritmo de mapeado basado en landmarks para detectar al menos los conos del entorno simulado
-- Hasta 1 punto: reconocer algún landmark adicional como las esquinas de las paredes o el contenedor de basura. En ese caso el mapa debería tener distintos tipos de landmarks. Los `Marker` tienen un campo entero llamado `type` que varía cómo los representa gráficamente RViz, los más típicos son 1 (CUBE), 2 (SPHERE) y 3 (CYLINDER). Simplemente usad uno distinto para cada tipo de landmark que detectéis, la forma dibujada es lo de menos.
+- Hasta 1.5 puntos: reconocer algún landmark adicional como las esquinas de las paredes o el contenedor de basura. En ese caso el mapa debería tener distintos tipos de landmarks. Los `Marker` tienen un campo entero llamado `type` que varía cómo los representa gráficamente RViz, los más típicos son 1 (CUBE), 2 (SPHERE) y 3 (CYLINDER). Simplemente usad uno distinto para cada tipo de landmark que detectéis, la forma dibujada es lo de menos.
 - Hasta 1 punto: En lugar de mover al robot con el teclado podéis implementar algún algoritmo que haga que se mueva aleatoriamente sin chocar con los obstáculos. En lugar de tomar un solo rayo a la izquierda y otro a la derecha, como en el ejemplo de la sesión anterior podéis ver la media de unas cuantas lecturas del láser a la izquierda y a la derecha del robot y girar en la dirección en que la media sea mayor. O podéis usar cualquier otro enfoque que se os ocurra.
-- hasta 1 punto: documentación clara y completa: vídeo explicativo (de 2-5 minutos) donde se vea el funcionamiento de los algoritmos y se describa el código y la estrategia seguida, además de un breve informe en PDF con conclusiones y posibles mejoras.
+
+**IMPORTANTE:** se debe incluir una documentación en formato vídeo explicativo  donde se vea el funcionamiento de todos los algoritmos implementados y se describa el código y la estrategia seguida, además de un breve informe en PDF con conclusiones y posibles mejoras. La documentación y pruebas se suponen incluidas en la puntuación de cada apartado (es decir, por ejemplo los 3 puntos del mapeado basado en nube de puntos son no solo por la implementación sino también por las pruebas y la descripción del código).
 
 
 
