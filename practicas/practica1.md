@@ -14,7 +14,7 @@ El título de mapeado "simple" viene de que no vamos a tener en cuenta los error
 
 ## Entorno simulado
 
-Os dejamos un entorno para el simulador `mvwim`. Para ponerlo en marcha, bajáos el archivo `prac1.world.xml` de Moodle y donde lo hayáis bajado teclear:
+Os dejamos un entorno para el simulador `mvsim`. Para ponerlo en marcha, bajáos el archivo `prac1.world.xml` de Moodle y donde lo hayáis bajado teclear:
 
 ```bash
 ros2 launch mvsim launch_world.launch.py world_file:=prac1.world.xml
