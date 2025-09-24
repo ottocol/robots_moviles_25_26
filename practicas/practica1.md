@@ -45,7 +45,7 @@ Además, como usaremos un láser para detectar obstáculos, tendremos un sistema
 En ROS 2 hay una herramienta llamada `view_frames` que genera un grafo con todos los sistemas de coordenadas activos en un momento dado y las relaciones entre ellos. Lo obtendremos en un .pdf y también en un formato especial llamado GraphViz (hay visores para Linux) con el siguiente comando:
 
 ```bash
-ros2 run tf_tools view_frames
+ros2 run tf2_tools view_frames
 ```
 
 Para el mundo simulado de la práctica, el pdf debería mostrar algo como esta figura:
