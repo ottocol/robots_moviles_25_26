@@ -134,7 +134,7 @@ pistas para la implementación:
 
 La práctica se debe realizar **de manera individual**.
 
-La fecha límite de entrega será el **7 de octubre a las 23:59 horas**. La entrega se realizará por Moodle.
+La fecha límite de entrega será el ~~7 de octubre~~ **14 de octubre a las 23:59 horas**. La entrega se realizará por Moodle.
 
 El baremo de puntuación será el siguiente:
 
