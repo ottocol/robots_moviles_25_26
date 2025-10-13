@@ -154,7 +154,7 @@ Como hemos visto en clase de teoría, para poder implementar localización y map
 Como el código fuente de ROS está disponible en Internet, en este apartado se trata de que lo examines y compares con lo visto en clase de teoría. Explica lo que hace el código de la forma más detallada que puedas y referencia en todo lo posible las transparencias de teoría relevantes (por ejemplo, "estas líneas calculan la probabilidad de obstáculos inesperados, como se hace en la figura de la derecha de la transparencia X del tema Y...").
 
 - El modelo de observación o del sensor basado en "haz de luz" o beam está en [https://api.nav2.org/nav2-humble/html/beam__model_8cpp_source.html](https://api.nav2.org/nav2-humble/html/beam__model_8cpp_source.html
-). En concreto el modelo de "haz de luz" que se explicó en teoría está en el método `BeamModel` (en clase de teoría está en las 2 transparencias de teoría "cómo representar matemáticamente los errores", tema 2 parte III) 
+).
 - El modelo de movimiento muestreado está en [https://api.nav2.org/nav2-humble/html/differential__motion__model_8cpp_source.html
 ](https://api.nav2.org/nav2-humble/html/differential__motion__model_8cpp_source.html
 ).
