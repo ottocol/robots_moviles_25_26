@@ -69,7 +69,7 @@ Para ver en RViz a dónde está mirando el robot puedes añadir sus ejes de coor
 
 **Entregable**: Captura una pantalla en la que se vean las lecturas del laser (o haz una foto a la pantalla) y luego con algún programa gráfico señala qué es lo que estaba "percibiendo" el robot en cada zona (poniendo un texto en cada zona que diga por ejemplo "pared", "mesa", "persona",...). Adjúntalo a la documentación escrita.
 
-> En el escritorio remoto no se pueden directamente copiar archivos. Para copiar archivos entre tu PC con Windows y el escritorio remoto puedes usar [WinSCP](https://winscp.net/eng/download.php). Con este programa te puedes conectar con el 
+> En el escritorio remoto no se pueden directamente copiar archivos. Para copiar archivos entre tu PC con Windows y el escritorio remoto puedes usar [WinSCP](https://winscp.net/eng/download.php). 
 
 ## Mapeado
 
