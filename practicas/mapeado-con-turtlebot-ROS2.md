@@ -63,7 +63,7 @@ ros2 run tf2_ros static_transform_publisher 0 0 0 1 0 0 0 base_link laser
 
 Esta transformación indica que el laser está rotado 180 grados en el eje X (cabeza abajo). La orden debe quedarse ejecutando todo el rato igual que el resto.
 
-Arrancar rviz con el comando `rviz2`. Añadir una visualización para el laser (botón `Add` abajo a la izquierda > en el listado `By Display Type` seleccionar `LaserScan`). Una vez añadida aparecerá en el panel de la izquierda, cambiar el `topic` a `/scan`. Deberían aparecer unas líneas blancas con las distancias detectadas por el laser.
+Arrancar rviz con el comando `rviz2`. Pon el global frame a `odom` ya que todavía no existe un `map`. Añadir una visualización para el laser (botón `Add` abajo a la izquierda > en el listado `By Display Type` seleccionar `LaserScan`). Una vez añadida aparecerá en el panel de la izquierda, cambiar el `topic` a `/scan`. Deberían aparecer unas líneas blancas con las distancias detectadas por el laser.
 
 Para ver en RViz a dónde está mirando el robot puedes añadir sus ejes de coordenadas: botón `Add` abajo a la izquierda > en el listado `By Display Type` seleccionar `Axes`. Una vez añadido, en el panel de la izquierda desplegar el `Axes` y cambiar el Reference frame a `base_link`. El eje rojo es el X, que apunta hacia el frente, el Y el verde y el Z el Azul (siguiendo el orden clásico R-G-B). 
 
