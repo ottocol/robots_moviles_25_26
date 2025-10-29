@@ -101,6 +101,8 @@ ros2 run nav2_map_server map_saver_cli -f mimapa  #o el nombre que le quieras da
 ros2 launch nav2_bringup localization_launch.py map:=el_archivo_de_mi_mapa.yaml
 ```
 
+IMPORTANTE: antes de marcar la posición inicial del robot cambia en rviz, en las `global options` el `fixed frame` a `map`
+
 Marca la posición inicial del robot con la opción de la barra de herramientas `2D pose estimate`. Pulsa sobre ella y luego en el mapa, clica en la posición que creas que está el robot y arrastra hacia la dirección en la que mira, verás que aparece una flecha verde indicando esta posición y dirección.
 
 Recuerda que:
