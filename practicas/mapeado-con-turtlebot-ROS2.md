@@ -82,7 +82,7 @@ ros2 launch slam_toolbox online_async_launch.py
 Para mover al robot puedes usar el nodo `teleop_twist_keyboard`:
 
 ```bash
-ros2 run teleopt_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
 Para que la teleoperación funcione, **la terminal donde se está ejecutando debe tener el foco del teclado, o sea estar en primer plano**, tendrás que apañártelas para que a la vez puedas ver por debajo la ventana de rviz2 con el mapa.
