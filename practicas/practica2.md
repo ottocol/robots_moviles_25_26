@@ -145,7 +145,7 @@ Ten en cuenta que si lo intentas llevar por sitios demasiado estrechos o le das 
 
 **La semana del 27 de octubre al 2 de noviembre y del 3 al 10 de noviembre** se probarán el mapeado, la localización y la navegación en los Turtlebot reales. Se harán turnos aleatorios para que se puedan usar los robots en grupos de 3-4 personas, **os puede tocar hacer la prueba uno de estos dos días, al azar**. La lista de turnos aparecerá publicada durante la semana inicial de la práctica. Si una vez asignado el turno no podéis venir por algún motivo justificado, consultadlo con el profesor.
 
-Se publicará una guía indicando los pasos exactos para probar mapeado y navegación en los Turtlebot. En esta guía se indicará qué pruebas debéis hacer y cómo documentarlas. La entrega de estas pruebas se realizará junto con la memoria principal de la práctica. Todos los que hayáis probado juntos el robot tendréis la misma puntuación.
+Se publicará una guía indicando los pasos exactos para probar mapeado y navegación en los Turtlebot. En esta guía se indicará qué pruebas debéis hacer y cómo documentarlas. ~~La entrega de estas pruebas se realizará junto con la memoria principal de la práctica~~. Todos los que hayáis probado juntos el robot tendréis la misma puntuación.
 
 ## Parte adicional: análisis de los modelos de movimiento y de observación de ROS (hasta 1 punto)
 
