@@ -93,7 +93,7 @@ Cosas a observar en el ejemplo:
     - una función que debe devolver el *goal* de la acción (en nuestro caso un `NavigateToPose.Goal`, que es la posición destino del robot)
     - una función que recibirá *feedback* del *action server*
     - Hay más parámetros, los tenéis en el [código fuente de la clase `ActionState`](https://github.com/uleroboticsgroup/yasmin/blob/main/yasmin_ros/yasmin_ros/action_state.py) en el repo de YASMIN
-- Al constructor de la clase le pasamos el *waypoing* destino (que luego guardamos en la propiedad `wp`) para que la función que construye el *goal* pueda acceder a él.    
+- Al constructor de la clase le pasamos el *waypoint* destino (que luego guardamos en la propiedad `wp`) para que la función que construye el *goal* pueda acceder a él.    
 - No hace falta definir el método `execute` del estado ya que ejecutar el estado es ejecutar la acción ROS2 asociada.
 - En el main tenéis, igual que en el otro ejemplo, cómo se ensambla y se ejecuta la máquina.
 - Si se pulsa Ctrl-C  hay que parar al robot cancelando la navegación al *waypoint* actual. Para cancelar la navegación lo que se hace es guardar en el main un array de estados "cancelables" y cuando se detecta el Ctrl-C (excepción `KeyboardInterrupt`) se llama al `set_cancel` de todos. En realidad solo haría falta cancelar el activo pero saber cuál es nos complica un poco más el código así que los cancelamos todos. 
