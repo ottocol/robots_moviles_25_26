@@ -65,6 +65,8 @@ En ROS2 podemos usar el paquete [YASMIN](https://github.com/uleroboticsgroup/yas
 sudo apt install ros-$ROS_DISTRO-yasmin ros-$ROS_DISTRO-yasmin-*
 ```
 
+Para usarlo en los ordenadores del laboratorio tendréis que compilar YASMIN, mirad el apéndice de la práctica.
+
 En el archivo `hola_yasmin.py` puedes ver una máquina de estados sencilla con solo 2 estados, A y B que van cambiando de uno a otro tras 1 segundo cada uno de ellos. Cuando el estado A se ha ejecutado ya 3 veces devuelve un valor que hace que la máquina acabe. Si lo ejecutas verás en la consola cómo va cambiando de estado. Si quieres verlo de forma gráfica puedes usar el comando `ros2 run yasmin_viewer yasmin_viewer_node`. Abre un navegador, escribe la URL `http://localhost:5000` y deberías poder ver gráficamente la máquina de estados.
 
 Cosas a observar en el ejemplo:
@@ -119,3 +121,21 @@ Para evitar obstáculos sigue la estrategia simple de mirar los rayos del lidar 
 La práctica se podrá entregar hasta el **domingo 23 de noviembre a las 23:59**
 
 
+
+## Apéndice: compilar YASMIN en los ordenadores del laboratorio
+
+
+```bash
+#instalar dependencias de YASMIN en un entorno virtual python y activarlo
+python3 -m venv --system-site-packages ~/ros2_venv
+source ~/ros2_venv/bin/activate
+pip install expiringdict flask waitress
+source ~/ros2_venv/bin/activate
+
+#bajarse el código fuente de YASMIN y compilarlo
+mkdir -p ~/ros2_yasmin_ws/src
+git clone https://github.com/uleroboticsgroup/yasmin.git
+cd ~/ros2_yasmin_ws
+source /opt/ros/jazzy/setup.bash
+colcon build
+```
