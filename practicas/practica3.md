@@ -134,6 +134,7 @@ source ~/ros2_venv/bin/activate
 
 #bajarse el código fuente de YASMIN y compilarlo
 mkdir -p ~/ros2_yasmin_ws/src
+cd ~/ros2_yasmin_ws/src
 git clone https://github.com/uleroboticsgroup/yasmin.git
 cd ~/ros2_yasmin_ws
 source /opt/ros/jazzy/setup.bash
