@@ -48,7 +48,7 @@ La carpeta `practica3` del *package* contiene los ejemplos que se describirán a
 
 ## Procesar las imágenes de la cámara (`color_detector.py`)
 
-Aunque no todas las tareas en robótica móvil requieren vision artificial, es un sensor que puede proporcionar información muy útil. Los turtlebot tienen una cámara [Orbbec Astra](https://www.roscomponents.com/es/camaras/orbbec) que nos puede proporcionar información 2D y 3D. Aquí solo veremos cómo procesar la imagen 2D. 
+Aunque no todas las tareas en robótica móvil requieren vision artificial, es un sensor que puede proporcionar información muy útil. Los turtlebot tienen una cámara [Orbbec Astra](https://www.orbbec.com/products/structured-light-camera/astra-series/) que nos puede proporcionar información 2D y 3D. Aquí solo veremos cómo procesar la imagen 2D. 
 
 OpenCV está integrado con ROS y es la biblioteca que se usa normalmente para procesamiento de imágenes.
 
