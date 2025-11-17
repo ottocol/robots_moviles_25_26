@@ -139,4 +139,5 @@ git clone https://github.com/uleroboticsgroup/yasmin.git
 cd ~/ros2_yasmin_ws
 source /opt/ros/jazzy/setup.bash
 colcon build
+source ~/ros2_yasmin_ws/install/setup.bash
 ```
