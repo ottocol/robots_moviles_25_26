@@ -27,7 +27,7 @@ Desde el 26 de noviembre (incluído), tanto la clase de teoría como la de prác
 - Si reserváis un Turtlebot y no aparecéis sin avisar antes y sin motivo justificado, no se os permitirá usar el robot la semana siguiente.
 - Si hay algún grupo que haya usado el robot muy pocas veces comparado con la media del resto de grupos, se le dará prioridad esa semana.
 
-Para que tengáis tiempo de organizar y pulir la documentación y realizar alguna última prueba en simulación, el proyecto se entregará en enero, teniendo como fecha límite el **25 de enero de 2025 a las 23:59**. 
+Para que tengáis tiempo de organizar y pulir la documentación y realizar alguna última prueba en simulación, el proyecto se entregará en enero, teniendo como fecha límite el **25 de enero de 2026 a las 23:59**. 
 
 Como el tamaño máximo de la entrega en este moodle es de 100Mb y no lo puedo ampliar, si vuestro proyecto ocupa más tendréis que entregar un archivo LEEME.TXT donde pongáis un enlace a Google Drive o similar con el/los archivos de la entrega. Si lo hacéis en Drive aseguráos al compartir que cualquier persona con el enlace tiene acceso al archivo, y no solo usuarios concretos.
 
