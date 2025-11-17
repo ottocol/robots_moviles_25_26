@@ -1,5 +1,5 @@
-# Proyecto de Robots Móviles, curso 2024-25
-## Universidad de Alicante, noviembre-diciembre 2024 
+# Proyecto de Robots Móviles, curso 2025-26
+## Universidad de Alicante, noviembre-diciembre 2025 
 
 
 En este proyecto debéis programar un robot móvil para que realice una tarea "compleja" que implique navegar por el entorno realizando una serie de subtareas. La tarea puede ser la que queráis, por ejemplo:
@@ -15,19 +15,19 @@ En este proyecto debéis programar un robot móvil para que realice una tarea "c
 
 Los grupos deberían ser de 3-4 personas. También pueden ser de menos de 3, o hacerlo de forma individual, pero os recomendamos si es posible el número de componentes ya dicho.
 
-Los grupos se deberían formar en lo posible durante la semana del 18 al 24 de noviembre, ya que el día 27 tendríamos la primera presentación de las ideas de proyecto en clase (ver más abajo, en el apartado "Presentaciones")
+Los grupos se deberían formar en lo posible durante la semana del 17 al 23 de noviembre, ya que el día 26 tendríamos la primera presentación de las ideas de proyecto en clase (ver más abajo, en el apartado "Presentaciones")
 
 
 ## Proceso de trabajo
 
-Desde el 27 de noviembre (incluído), tanto la clase de teoría como la de prácticas se dedicarán a trabajar en el proyecto. Os recomendamos que dediquéis en lo posible la clase de teoría a trabajar en búsqueda de información y pruebas sobre el simulador y las de prácticas a probar cosas en los Turtlebot.
+Desde el 26 de noviembre (incluído), tanto la clase de teoría como la de prácticas se dedicarán a trabajar en el proyecto. Os recomendamos que dediquéis en lo posible la clase de teoría a trabajar en búsqueda de información y pruebas sobre el simulador y las de prácticas a probar cosas en los Turtlebot.
 
 - Para usar un Turtlebot en prácticas debéis reservarlo antes. Para ello, alguien del grupo debe enviar una tutoría al profesor hasta el lunes a las 14:00 de la semana en que queráis usarlo. Los turnos se asignarán por orden de llegada
 - Si en clase quedan Turtlebot libres podréis usarlos aunque no tengáis reserva. Si pasan 10 minutos de la hora inicial y no ha aparecido nadie del grupo que hizo la reserva, se considerará que el robot está libre.
 - Si reserváis un Turtlebot y no aparecéis sin avisar antes y sin motivo justificado, no se os permitirá usar el robot la semana siguiente.
 - Si hay algún grupo que haya usado el robot muy pocas veces comparado con la media del resto de grupos, se le dará prioridad esa semana.
 
-Para que tengáis tiempo de organizar y pulir la documentación y realizar alguna última prueba en simulación, el proyecto se entregará en enero, teniendo como fecha límite el ~~19 de enero~~ **24 de enero de 2025 a las 23:59**. 
+Para que tengáis tiempo de organizar y pulir la documentación y realizar alguna última prueba en simulación, el proyecto se entregará en enero, teniendo como fecha límite el **25 de enero de 2025 a las 23:59**. 
 
 Como el tamaño máximo de la entrega en este moodle es de 100Mb y no lo puedo ampliar, si vuestro proyecto ocupa más tendréis que entregar un archivo LEEME.TXT donde pongáis un enlace a Google Drive o similar con el/los archivos de la entrega. Si lo hacéis en Drive aseguráos al compartir que cualquier persona con el enlace tiene acceso al archivo, y no solo usuarios concretos.
 
@@ -36,8 +36,8 @@ Como el tamaño máximo de la entrega en este moodle es de 100Mb y no lo puedo a
 
 Se realizarán dos presentaciones **en el horario de teoría**:
 
-- El **27 de noviembre**: **presentación inicial**, mínimo 1 minuto y máximo 3. Debéis exponer la idea inicial, posibles formas de resolver la tarea (algoritmos, técnicas, ...), y qué creéis que puede funcionar en simulación y con los robots reales.
-- El **18 de diciembre**: **informe de progreso**, decidiremos el tiempo exacto de exposición cuando sepamos el número de grupos, pero estará en torno a los 5-10 minutos. Debéis explicar de nuevo qué tarea estáis desarrollando, técnicas y algoritmos empleados para resolverla y los resultados que habéis tenido hasta el momento. 
+- El **26 de noviembre**: **presentación inicial**, mínimo 1 minuto y máximo 3. Debéis exponer la idea inicial, posibles formas de resolver la tarea (algoritmos, técnicas, ...), y qué creéis que puede funcionar en simulación y con los robots reales.
+- El **17 de diciembre**: **informe de progreso**, decidiremos el tiempo exacto de exposición cuando sepamos el número de grupos, pero estará en torno a los 5-10 minutos. Debéis explicar de nuevo qué tarea estáis desarrollando, técnicas y algoritmos empleados para resolverla y los resultados que habéis tenido hasta el momento. 
 
 En la segunda presentación deberíais usar ayudas visuales para ilustrar lo que digáis (diapositivas, videos de los resultados hasta ahora,...). En la primera no es necesario. En la medida de lo posible deberíais participar todos los componentes del grupo.
 
