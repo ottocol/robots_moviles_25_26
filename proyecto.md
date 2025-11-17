@@ -22,7 +22,7 @@ Los grupos se deberían formar en lo posible durante la semana del 17 al 23 de n
 
 Desde el 26 de noviembre (incluído), tanto la clase de teoría como la de prácticas se dedicarán a trabajar en el proyecto. Os recomendamos que dediquéis en lo posible la clase de teoría a trabajar en búsqueda de información y pruebas sobre el simulador y las de prácticas a probar cosas en los Turtlebot.
 
-- Para usar un Turtlebot en prácticas debéis reservarlo antes. Para ello, alguien del grupo debe enviar una tutoría al profesor hasta el lunes a las 14:00 de la semana en que queráis usarlo. Los turnos se asignarán por orden de llegada
+- Para usar un Turtlebot en prácticas debéis reservarlo antes. Para ello, alguien del grupo debe enviar una tutoría al profesor hasta el viernes a las 15:00 de la semana anterior a la que queráis usarlo. Los turnos se asignarán por orden de llegada
 - Si en clase quedan Turtlebot libres podréis usarlos aunque no tengáis reserva. Si pasan 10 minutos de la hora inicial y no ha aparecido nadie del grupo que hizo la reserva, se considerará que el robot está libre.
 - Si reserváis un Turtlebot y no aparecéis sin avisar antes y sin motivo justificado, no se os permitirá usar el robot la semana siguiente.
 - Si hay algún grupo que haya usado el robot muy pocas veces comparado con la media del resto de grupos, se le dará prioridad esa semana.
