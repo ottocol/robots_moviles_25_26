@@ -118,7 +118,7 @@ Para evitar obstáculos sigue la estrategia simple de mirar los rayos del lidar 
 - Hasta 2 puntos: implementar la funcionalidad pedida en el apartado "Tarea a desarrollar" usando *behavior trees* además de máquinas de estados. Para ello podéis usar la bibliotecas [py_trees_ros](https://github.com/splintered-reality/py_trees_ros) o cualquier otra que encontréis por Internet.
 
 
-La práctica se podrá entregar hasta el **domingo 23 de noviembre a las 23:59**
+La práctica se podrá entregar hasta el ~~domingo 23 de noviembre~~ **domingo 30 de noviembre a las 23:59**
 
 
 
